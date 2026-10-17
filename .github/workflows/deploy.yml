@@ -1,0 +1,43 @@
+name: deploy
+
+# Reference pipeline, NEVER RUN against a real Google Cloud project, and the Flex Template image was never built.
+# Skipped unless the repository variable GCP_WIF_PROVIDER is set (see gcp-wif-github-deploy for the keyless setup).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  template:
+    if: vars.GCP_WIF_PROVIDER != ''
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Build the Flex Template (image and spec)
+        env:
+          TEMPLATE_PATH: ${{ vars.DATAFLOW_TEMPLATE_PATH }}
+          IMAGE: ${{ vars.DATAFLOW_TEMPLATE_IMAGE }}
+        run: |
+          gcloud dataflow flex-template build "$TEMPLATE_PATH" \
+            --image-gcr-path "$IMAGE" --sdk-language PYTHON --flex-template-base-image PYTHON3 \
+            --metadata-file flex/metadata.json --py-path . --env FLEX_TEMPLATE_PYTHON_PY_FILE=main.py
+      - name: Launch the streaming job
+        env:
+          TEMPLATE_PATH: ${{ vars.DATAFLOW_TEMPLATE_PATH }}
+          REGION: ${{ vars.GCP_REGION }}
+          SUBSCRIPTION: ${{ vars.PAYMENTS_SUBSCRIPTION }}
+          TOTALS: ${{ vars.PAYMENTS_TOTALS_TABLE }}
+          DEAD: ${{ vars.PAYMENTS_DEAD_TABLE }}
+        run: |
+          gcloud dataflow flex-template run "payment-totals-${GITHUB_RUN_ID}" --template-file-gcs-location "$TEMPLATE_PATH" \
+            --region "$REGION" --parameters "input_subscription=$SUBSCRIPTION,output_table=$TOTALS,dead_letter_table=$DEAD"

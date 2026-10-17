@@ -1,0 +1,9 @@
+{"event_id": "e1", "merchant": "acme", "amount_cents": 1250, "currency": "USD", "event_time": "2026-10-17T10:00:05Z"}
+{"event_id": "e2", "merchant": "acme", "amount_cents": 800, "currency": "USD", "event_time": "2026-10-17T10:00:40Z"}
+{"event_id": "e2", "merchant": "acme", "amount_cents": 800, "currency": "USD", "event_time": "2026-10-17T10:00:40Z"}
+{"event_id": "e3", "merchant": "globex", "amount_cents": 5000, "currency": "EUR", "event_time": "2026-10-17T10:00:50Z"}
+{"event_id": "e4", "merchant": "acme", "amount_cents": 300, "currency": "USD", "event_time": "2026-10-17T10:01:10Z"}
+{"event_id": "e5", "merchant": "acme", "amount_cents": -5, "currency": "USD", "event_time": "2026-10-17T10:01:20Z"}
+{"event_id": "e6", "merchant": "acme", "amount_cents": 100, "currency": "JPY", "event_time": "2026-10-17T10:01:30Z"}
+this line is not json at all
+{"event_id": "e7", "merchant": "globex", "amount_cents": 700, "currency": "EUR", "event_time": "2026-10-17T10:01:45Z"}

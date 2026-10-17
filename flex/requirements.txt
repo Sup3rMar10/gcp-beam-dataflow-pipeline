@@ -1,0 +1,1 @@
+# Pinned by the Flex Template base image's Beam SDK; add only what the pipeline needs beyond it.

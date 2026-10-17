@@ -1,0 +1,38 @@
+{
+  "name": "Payment totals",
+  "description": "Validates payment events from Pub/Sub, deduplicates them, and writes per-merchant totals for event-time windows to BigQuery. Rejected messages go to a dead-letter table.",
+  "parameters": [
+    {
+      "name": "input_subscription",
+      "label": "Input Pub/Sub subscription",
+      "helpText": "projects/PROJECT/subscriptions/NAME",
+      "regexes": ["^projects/[^/]+/subscriptions/[^/]+$"]
+    },
+    {
+      "name": "output_table",
+      "label": "Totals table",
+      "helpText": "PROJECT:DATASET.TABLE",
+      "regexes": ["^[^:]+:[^.]+\\.[^.]+$"]
+    },
+    {
+      "name": "dead_letter_table",
+      "label": "Dead-letter table",
+      "helpText": "PROJECT:DATASET.TABLE",
+      "regexes": ["^[^:]+:[^.]+\\.[^.]+$"]
+    },
+    {
+      "name": "window_seconds",
+      "label": "Window size in seconds",
+      "helpText": "Length of each event-time window. Default 60.",
+      "isOptional": true,
+      "regexes": ["^[1-9][0-9]*$"]
+    },
+    {
+      "name": "allowed_lateness_seconds",
+      "label": "Allowed lateness in seconds",
+      "helpText": "How long after a window closes a late event still corrects it. Default 120.",
+      "isOptional": true,
+      "regexes": ["^[0-9]+$"]
+    }
+  ]
+}
