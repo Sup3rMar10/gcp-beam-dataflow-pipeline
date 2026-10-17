@@ -4,7 +4,7 @@
 
 A **Dataflow-style streaming pipeline** in Apache Beam, built so its hard parts are testable without Google Cloud: bad messages go to a **dead-letter output** instead of failing the job, **duplicates** are not double counted, and per-merchant totals are computed over **event-time windows** with a defined policy for **late data**, tested deterministically with `TestStream`, where the test controls the watermark.
 
-> **What is verified, and what is not.** 95 tests pass locally on Python 3.13 with Apache Beam 2.77, and CI repeats this on Linux. The pipeline really runs (the Beam local runner executes it in the tests), including streaming scenarios with an exact watermark. **Nothing has run on Dataflow**: there is no project, Pub/Sub topic or BigQuery table. The Pub/Sub-to-BigQuery job (`run_stream`) and the Flex Template packaging were never launched or built; the tests only check that their arguments, schemas and files are consistent with each other.
+> **What is verified, and what is not.** 95 tests pass locally on Python 3.13 with Apache Beam 2.77, and GitHub Actions on Linux passed the same tests on Python 3.11 and 3.13, the batch run over the sample file, and `actionlint` (2026-10-17). The pipeline really runs (the Beam local runner executes it in the tests), including streaming scenarios with an exact watermark. **Nothing has run on Dataflow**: there is no project, Pub/Sub topic or BigQuery table. The Pub/Sub-to-BigQuery job (`run_stream`) and the Flex Template packaging were never launched or built; the tests only check that their arguments, schemas and files are consistent with each other.
 
 ## What it does (`payments_beam/`)
 
